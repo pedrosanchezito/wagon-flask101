@@ -16,3 +16,11 @@ def hello():
 @app.route('/api/v1/products')
 def get_products():
     return jsonify(PRODUCTS)
+
+@app.route('/api/v1/products/<id>')
+def get_product(id):
+    if [product for product in PRODUCTS if product['id'] == id]:
+        return jsonify(product)
+    return '404'
+
+
