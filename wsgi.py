@@ -13,14 +13,15 @@ PRODUCTS = [
 def hello():
     return "Hello World!"
 
-@app.route('/api/v1/products')
+@app.route('/api/v1/products', methods = ['GET'])
 def get_products():
     return jsonify(PRODUCTS)
 
-@app.route('/api/v1/products/<id>')
+@app.route('/api/v1/products/<int:id>', methods = ['GET','POST'])
 def get_product(id):
-    if [product for product in PRODUCTS if product['id'] == id]:
-        return jsonify(product)
-    return '404'
+    for product in PRODUCTS:
+        if product['id'] == id:
+            return jsonify(product)
+    return "Ce produit n'existe pas", 404
 
 
