@@ -29,3 +29,7 @@ class TestViews(TestCase):
         response = self.client.delete("/api/v1/products/99")
         self.assertEqual(response.status_code, 404)
 
+    def test_create_product(self):
+        response = self.client.post("/api/v1/products")
+        self.assertEqual(response.status_code, 201)
+
