@@ -1,6 +1,8 @@
 # wsgi.py
 from flask import Flask, jsonify, request
+import json
 app = Flask(__name__)
+
 
 PRODUCTS = [
     { 'id': 1, 'name': 'Skello' },
@@ -14,9 +16,20 @@ PRODUCTS = [
 def hello():
     return "Hello World!"
 
-@app.route('/api/v1/products', methods = ['GET'])
+
+@app.route('/api/v1/products', methods = ['GET','POST'])
 def get_products():
-    return jsonify(PRODUCTS), 200
+    if request.method == 'GET':
+        return jsonify(PRODUCTS), 200
+
+    if request.method == 'POST':
+        name = json.dumps(request.get_json())
+        PRODUCTS.append({'id':ID.next(), 'name':name})
+        return "Product created", 201
+
+    return "", 404
+
+
 
 @app.route('/api/v1/products/<int:id>', methods = ['GET','DELETE'])
 def manage_product(id):
@@ -29,6 +42,17 @@ def manage_product(id):
         for product in PRODUCTS:
             if product['id'] == id:
                 PRODUCTS.remove(product)
-                return "Produit supprimé", 204
+                return "Product deleted", 204
 
-    return "Ce produit n'existe pas", 404
+    return "This product does not exist", 404
+
+
+class Counter:
+    def __init__(self):
+        self.id = 4
+
+    def next(self):
+        self.id += 1
+        return self.id
+
+ID = Counter()
